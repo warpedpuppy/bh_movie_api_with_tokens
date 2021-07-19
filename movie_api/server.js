@@ -15,7 +15,7 @@ const http = require('http'),
         }
     });
 
-    if (queueMicrotask.pathname.includes('documentation')) {
+    if (q.pathname.includes('documentation')) {
         filePath = (_dirname + '/documentation.html'); 
     } else {
         filePath = 'index.html';
