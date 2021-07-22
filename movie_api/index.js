@@ -2,9 +2,10 @@ const express = require('express');
 const app = express();
 
 let topmovies = [
-   { title: 'Batman',
+   { 
+       title: 'Batman',
     genre: Action
-},
+    },
     {
       title:'Indiana Jones and the Last Crusade',
       genre:'Lethal Weapon 2'  
@@ -18,13 +19,13 @@ let topmovies = [
         genre:'Comedy'
     },
     {
-        title:'Look Who"'"s Talking',
+        title:'Look Whos Talking',
         genre: 'Comedy'
     },
     {
         title: 'Ghostbusters II',
         genre: 'Comedy'
-    }
+    },
     {
         title: 'Back to the Future Part II',
         genre: 'Adventure'
@@ -38,3 +39,15 @@ let topmovies = [
         genre: 'Drama'
     }
 ];
+
+    app.get('/movies',(req, res) => {
+        res.json(topmovies);
+    });
+
+    app.get('/', (req, res) => {
+        res.send('This is a test!');
+    });
+
+    app.listen(8080, () => {
+        console.log('Your app is listening on port 8080.');
+    });
