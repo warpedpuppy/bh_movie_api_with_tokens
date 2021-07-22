@@ -5,7 +5,7 @@ const app = express();
 let topmovies = [
    { 
        title: 'Batman',
-    genre: Action
+    genre: 'Action'
     },
     {
       title:'Indiana Jones and the Last Crusade',
