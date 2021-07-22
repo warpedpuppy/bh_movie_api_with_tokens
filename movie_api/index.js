@@ -1,4 +1,5 @@
 const express = require('express');
+morgan = require('morgan');
 const app = express();
 
 let topmovies = [
@@ -50,8 +51,15 @@ let topmovies = [
 
     app.use('/documentation.html', express.static('public'));
 
+    app.use(morgan('common'));
+
     app.listen(8080, () => {
         console.log('Your app is listening on port 8080.');
+    });
+
+    app.use((err, req, res, next) => {
+        console.error(err.stack);
+        res.status(500).send('Something broke!');
     });
 
     
