@@ -51,7 +51,7 @@ let topmovies = [
         res.json('/movies/:directors', (req, res) => { return movies.directors === req.params.directors});
     });
 
-    app.get(/user, (req, res) => {
+    app.get('/movies/:user', (req, res) => {
         res.send('Successful get request returning data on users')
     });
 
@@ -104,7 +104,6 @@ let topmovies = [
     app.delete('/movies/:user', (req, res) => {
         let user = user.find((obj) => { return obj.id !== req.params.id});
         res.status(201).send('User ' + req.params.id + 'was deleted. ');
-        }
     });
 
     //update movies//
