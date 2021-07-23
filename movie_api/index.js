@@ -1,6 +1,8 @@
 const express = require('express');
 morgan = require('morgan');
 const app = express();
+const bodyParser = require('body-parser');
+const uuid = require('uuid');
 
 let topmovies = [
    { 
