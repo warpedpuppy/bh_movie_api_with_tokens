@@ -8,7 +8,9 @@
     "morgan": "^1.10.0",
     "dev": "nodemon index.js"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
