@@ -47,69 +47,55 @@ let topmovies = [
         res.json(topmovies);
     });
 
-    app.get('/movies[directors]', (req, res) => {
-        res.json('/movies/:directors', (req, res) => { return movies.directors === req.params.directors});
+    app.get('/movies', (req, res) => {
+        res.send('Successful GET request returning lists of movies');
     });
 
-    app.get('/movies/:user', (req, res) => {
-        res.send('Successful get request returning data on users')
+    app.get('/movies/[movietitle]', (req, res) => {
+        res.send('Successful GET request returning title, img, description, genre, director, actors');
     });
+
+    app.get('/movies/[genre]', (req, res) => {
+        res.send('Successful GET request returning list of movies by genre');
+    });
+
+    app.get('/movies/[directors]', (req, res) => {
+        res.send('Successful GET request returning list of directors and information about directors');
+    });
+
+    app.get('/user/[username]/movies/[favorite]/[movieId]', (req, res) => {
+        res.send('Successful GET request returning list of movies added to users favorites');
+    });
+
+    app.post('/user/[username]/movies/[favorite]/[movieId]', (req, res) => {
+        res.send('Successful Add request returning movies added to favorites');
+    });
+
+    app.delete('/user/[username]/movies/[favorite]/remove/[movieId]', (req, res) => {
+        res.send('Successful delete request returning list with movies removed that were deleted');
+    });
+
+    app.post('/user', (req, res) => {
+        res.send('Successful add a new user account and provide id');
+    });
+
+    app.post('/user/[username]', (req, res) => {
+        res.send('Successful add update to users account');
+    });
+
+    app.get('/user/[username]', (req, res) => {
+        res.send('Successful GET request returning users information');
+    });
+
+    app.delete('/user/[username]', (req, res) => {
+        res.send('Successful deletes users account');
+    });
+
+
 
     app.get('/', (req, res) => {
         res.send('This is a test!');
     });
-
-    //add movies//
-    app.post('/movies', (req, res) => {
-        let newMovies = req.body;
-
-        if (!newMovies.name) {
-            const message = 'Missing name in request body';
-            res.status(400).send(message);
-        } else {
-            newMovies.id = uuid.v4();
-            movies.push(newMovies);
-            res.status(201).send(newMovies);
-        }
-    });
-
-    //delete movies//
-    app.delete('/movies/:id', (req, res) => {
-        let movies = movies.find((movies) => {
-            return movies.id === req.params.id }); 
-    
-        if (student) {
-            students = students.filter((obj) => {
-                return obj.id !== req.params.id });
-            res.status(201).send('movies ' + req.params.id + 'was deleted.');
-            }
-    });
-
-
-    //add users//
-    app.post('/movies/:user', (req, res) => {
-        let newUser = req.body;
-
-        if (!newUser) {
-            const message = 'Missin name in request body';
-            res.status(400).send(message);
-        } else {
-            newUser.id = uuid.v4();
-            res.status(201).send(newStudent);
-        }
-    });
-
-
-    //delete users//
-    app.delete('/movies/:user', (req, res) => {
-        let user = user.find((obj) => { return obj.id !== req.params.id});
-        res.status(201).send('User ' + req.params.id + 'was deleted. ');
-    });
-
-    //update movies//
-    app.put('/movies/:name/:genre/:description/:image', (req, res) => {
-        let student = students.find((student) => { return movies})
-    })
 
     app.use('/documentation.html', express.static('public'));
 
