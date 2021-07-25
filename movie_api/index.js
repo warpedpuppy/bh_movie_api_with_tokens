@@ -1,5 +1,5 @@
 const express = require('express');
-morgan = require('morgan');
+const morgan = require('morgan');
 const app = express();
 const bodyParser = require('body-parser');
 const uuid = require('uuid');
@@ -43,52 +43,62 @@ let topmovies = [
     }
 ];
 
-    app.get('/movies',(req, res) => {
-        res.json(topmovies);
-    });
 
     app.get('/movies', (req, res) => {
-        res.send('Successful GET request returning lists of movies');
+        res.json(movies);
     });
 
-    app.get('/movies/[movietitle]', (req, res) => {
-        res.send('Successful GET request returning title, img, description, genre, director, actors');
+    app.get('/movies/:genre', (req, res) => {
+        res.json(movies.find( (movies) =>
+        { return movies.genre === req.params.genre}));
     });
 
-    app.get('/movies/[genre]', (req, res) => {
-        res.send('Successful GET request returning list of movies by genre');
+
+    app.get('/movies/:directors', (req, res) => {
+        res.json(movies.find( (movies) =>
+        { return movies.directors === req.params.directors}));
     });
 
-    app.get('/movies/[directors]', (req, res) => {
-        res.send('Successful GET request returning list of directors and information about directors');
-    });
-
-    app.get('/user/[username]/movies/[favorite]/[movieId]', (req, res) => {
+    app.get('/user/movies/:favorite', (req, res) => {
         res.send('Successful GET request returning list of movies added to users favorites');
     });
 
-    app.post('/user/[username]/movies/[favorite]/[movieId]', (req, res) => {
+    app.post('/user/movies/:favorite/:movieid', (req, res) => {
         res.send('Successful Add request returning movies added to favorites');
     });
 
-    app.delete('/user/[username]/movies/[favorite]/remove/[movieId]', (req, res) => {
+    app.delete('/user/movies/:favorite/remove/:movieid', (req, res) => {
         res.send('Successful delete request returning list with movies removed that were deleted');
     });
 
     app.post('/user', (req, res) => {
-        res.send('Successful add a new user account and provide id');
+        let newUser = req.body;
+        
+        if (!newUser) {
+            const message = 'Username not found';
+            res.status(400).send(message);
+        }else {
+            newUser.id = uuid.v4();
+            movies.push(newUser);
+            res.status(201).send(newUser);
+        }
     });
 
-    app.post('/user/[username]', (req, res) => {
-        res.send('Successful add update to users account');
+    app.put('/user/:userid/', (req, res) => {
+        let user = user.find((user) => {
+            return user.name === req.params.name});
     });
 
-    app.get('/user/[username]', (req, res) => {
-        res.send('Successful GET request returning users information');
-    });
 
-    app.delete('/user/[username]', (req, res) => {
-        res.send('Successful deletes users account');
+    app.delete('/user/delete/:userid', (req, res) => {
+        let user = user.find((user) => {
+            return user.id === req.params.id});
+
+            if (user) {
+                user = user.filter((obj) => {
+                    return obj.id !== req.params.id});
+                res.status(201).send('User' + req.params.id + 'was deleted.');
+            }
     });
 
 
@@ -100,6 +110,8 @@ let topmovies = [
     app.use('/documentation.html', express.static('public'));
 
     app.use(morgan('common'));
+
+    app.use(bodyParser.json());
 
     app.listen(8080, () => {
         console.log('Your app is listening on port 8080.');
