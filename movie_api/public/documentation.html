@@ -48,15 +48,22 @@
                     <td>Json objects returns information on directors, birth, death</td>
                 </tr>
                 <tr>
+                    <td>Favorite Movies</td>
+                    <td>Get</td>
+                    <td>/user/[username]/movies/[favorite]</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
                     <td>Add to favorites</td>
-                    <td>/user/[username]/movies/[moviesId]</td>
+                    <td>/user/[username]/movies/[[favorite]/[moviesId]</td>
                     <td>Post</td>
                     <td>Json object about movie being added</td>
                     <td>Json object with the movie that was added and an id</td>
                 </tr>
                 <tr>
                     <td>Delete movies from favorites</td>
-                    <td>/user/[username]/movies/remove/[moviesId]</td>
+                    <td>/user/[username]/movies/[favorite]/remove/[moviesId]</td>
                     <td>Delete</td>
                     <td>None</td>
                     <td>message indicating the status on if the movie was deleted or not</td>
