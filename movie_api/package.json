@@ -1,7 +1,7 @@
 {
   "name": "movie_api",
   "version": "1.0.0",
-  "description": "",
+  "description": "assignment for movie_api",
   "main": "index.js",
   "dependencies": {
     "express": "^4.17.1",
