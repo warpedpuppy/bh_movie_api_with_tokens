@@ -24,25 +24,39 @@
                     <td>/movies</td>
                     <td>GET</td>
                     <td>None</td>
-                    <td>Json objects show data on movies, description, genre, director, image</td>
+                    <td>Json objects show data on list of movies</td>
                 </tr>
                 <tr>
-                    <td>Get list of directors</td>
-                    <td>/movies[directors]</td>
+                    <td>Movie details</td>
+                    <td>/movies/[movietitle]</td>
                     <td>GET</td>
                     <td>None</td>
-                    <td>Json objects showing data on directors bio, birth date, death</td>
+                    <td>Json objects showing data on movie title, img, description,genre, directors, actors</td>
                 </tr>
                 <tr>
-                    <td>Add New movies</td>
-                    <td>/movies</td>
+                    <td>Movie Genres</td>
+                    <td>/movies/[genre]</td>
+                    <td>Get</td>
+                    <td>None</td>
+                    <td>Json objects returns movies based on genres</td>
+                </tr>
+                <tr>
+                    <td>Movie Directors</td>
+                    <td>/movies/[directors]</td>
+                    <td>Get</td>
+                    <td>None</td>
+                    <td>Json objects returns information on directors, birth, death</td>
+                </tr>
+                <tr>
+                    <td>Add to favorites</td>
+                    <td>/user/[username]/movies/[moviesId]</td>
                     <td>Post</td>
                     <td>Json object about movie being added</td>
                     <td>Json object with the movie that was added and an id</td>
                 </tr>
                 <tr>
-                    <td>Delete movies</td>
-                    <td>/movies</td>
+                    <td>Delete movies from favorites</td>
+                    <td>/user/[username]/movies/remove/[moviesId]</td>
                     <td>Delete</td>
                     <td>None</td>
                     <td>message indicating the status on if the movie was deleted or not</td>
@@ -55,8 +69,22 @@
                     <td>Json with information added and id confirming completion or failure</td>
                 </tr>
                 <tr>
+                    <td>Log in</td>
+                    <td>/user/[username]</td>
+                    <td>Get</td>
+                    <td>None</td>
+                    <td>Json with data about users account</td>
+                </tr>
+                <tr>
+                    <td>Update account</td>
+                    <td>Post</td>
+                    <td>/user/[username]</td>
+                    <td>Json with data that is being added</td>
+                    <td>Json confirming that updates have been applied or denied</td>
+                </tr>
+                <tr>
                     <td>Delete a user</td>
-                    <td>/user</td>
+                    <td>/user/[username]</td>
                     <td>Delete</td>
                     <td>None</td>
                     <td>Message indicating the status of whether or not the request was completed</td>
