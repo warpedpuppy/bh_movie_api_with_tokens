@@ -2,11 +2,11 @@ const express = require('express'),
 const morgan = require('morgan'),
 const app = express(),
 const bodyParser = require('body-parser'),
-const uuid = require('uuid'),
-const path = require('path');
+const uuid = require('uuid');
 
 
-let topmovies = [
+
+let topMovies = [
    { 
        title: 'Batman',
     genre: 'Action'
@@ -68,7 +68,7 @@ let topmovies = [
         res.json(movies);
     });
 
-    app.get('/movies/:name', (req, res) => {
+    app.get('/movies/:title', (req, res) => {
         res.send('Details have not been loaded yet');
     });
 
@@ -78,16 +78,22 @@ let topmovies = [
         { return movies.directors === req.params.name;
         }));
     });
+  
 
-    app.get('/user/movies/:favorite', (req, res) => {
-        res.send('Successful GET request returning list of movies added to users favorites');
+    app.post('/movies', (req, res) => {
+        let newMovie = req.body;
+
+        if(!newMovie.title) {
+            const message = 'Missing title in request body';
+            res.status(400).send(message);
+        }else {
+            newMovie.id = uuid.v4();
+            movies.push(newMovie);
+            res.status(201).send(newMovie);
+        }
     });
 
-    app.post('/user/movies/:favorite/:movieid', (req, res) => {
-        res.send('Successful Add request returning movies added to favorites');
-    });
-
-    app.delete('/user/movies/:favorite/remove/:movieid', (req, res) => {
+    app.delete('/movies/remove/:title', (req, res) => {
         res.send('Successful delete request returning list with movies removed that were deleted');
     });
 
@@ -110,13 +116,13 @@ let topmovies = [
         }
     });
 
-    app.put('/user/:username/', (req, res) => {
+    app.put('/users/:username', (req, res) => {
         let user = user.find((user) => {
             return user.username === req.params.username});
     });
 
 
-    app.delete('/user/delete/:userid', (req, res) => {
+    app.delete('/users/delete/:username', (req, res) => {
         let user = user.find((user) => {
             return user.id === req.params.id});
 
