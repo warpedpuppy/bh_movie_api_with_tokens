@@ -4,6 +4,12 @@ const app = express();
 const bodyParser = require('body-parser');
 const uuid = require('uuid');
 
+app.use('/documentation.html', express.static('public'));
+
+app.use(morgan('common'));
+
+app.use(bodyParser.json());
+
 let topmovies = [
    { 
        title: 'Batman',
@@ -41,22 +47,33 @@ let topmovies = [
         title: 'Dead Poets Society',
         genre: 'Drama'
     }
-];
+ ];
 
+    let users = [
+        {
+        id: 1,
+        username: 'Dan',
+        password: 'password1',
+        email: 'dan@yahoo.com',
+        birthday: '05-15- 2005'
+        }
+    ];
+
+//---------Movie Requests--------
 
     app.get('/movies', (req, res) => {
         res.json(movies);
     });
 
-    app.get('/movies/:genre', (req, res) => {
-        res.json(movies.find( (movies) =>
-        { return movies.genre === req.params.genre}));
+    app.get('/movies/:name', (req, res) => {
+        res.send('Details have not been loaded yet');
     });
 
 
-    app.get('/movies/:directors', (req, res) => {
+    app.get('/movies/directors/:name', (req, res) => {
         res.json(movies.find( (movies) =>
-        { return movies.directors === req.params.directors}));
+        { return movies.directors === req.params.name;
+        }));
     });
 
     app.get('/user/movies/:favorite', (req, res) => {
@@ -71,22 +88,28 @@ let topmovies = [
         res.send('Successful delete request returning list with movies removed that were deleted');
     });
 
-    app.post('/user', (req, res) => {
+    //--------User requests--------
+
+    app.get('/users', (req, res) => {
+        res.json(users);
+    });
+
+    app.post('/users', (req, res) => {
         let newUser = req.body;
         
-        if (!newUser) {
+        if (!newUser.username) {
             const message = 'Username not found';
             res.status(400).send(message);
         }else {
             newUser.id = uuid.v4();
-            movies.push(newUser);
+            users.push(newUser);
             res.status(201).send(newUser);
         }
     });
 
-    app.put('/user/:userid/', (req, res) => {
+    app.put('/user/:username/', (req, res) => {
         let user = user.find((user) => {
-            return user.name === req.params.name});
+            return user.username === req.params.username});
     });
 
 
@@ -104,17 +127,7 @@ let topmovies = [
 
 
     app.get('/', (req, res) => {
-        res.send('This is a test!');
-    });
-
-    app.use('/documentation.html', express.static('public'));
-
-    app.use(morgan('common'));
-
-    app.use(bodyParser.json());
-
-    app.listen(8080, () => {
-        console.log('Your app is listening on port 8080.');
+        res.send('Welcome to My Flix');
     });
 
     app.use((err, req, res, next) => {
@@ -122,4 +135,10 @@ let topmovies = [
         res.status(500).send('Something broke!');
     });
 
+    
+    app.listen(8080, () => {
+        console.log('Your app is listening on port 8080.');
+    });
+
+    
     
