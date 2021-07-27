@@ -1,14 +1,15 @@
-const express = require('express');
-const morgan = require('morgan');
-const app = express();
-const bodyParser = require('body-parser');
-const uuid = require('uuid');
-
+const express = require('express'),
+const morgan = require('morgan'),
+const app = express(),
+const bodyParser = require('body-parser'),
+const uuid = require('uuid'),
+const path = require('path');
 app.use('/documentation.html', express.static('public'));
 
 app.use(morgan('common'));
 
 app.use(bodyParser.json());
+
 
 let topmovies = [
    { 
