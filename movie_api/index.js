@@ -4,11 +4,6 @@ const app = express(),
 const bodyParser = require('body-parser'),
 const uuid = require('uuid'),
 const path = require('path');
-app.use('/documentation.html', express.static('public'));
-
-app.use(morgan('common'));
-
-app.use(bodyParser.json());
 
 
 let topmovies = [
@@ -59,6 +54,13 @@ let topmovies = [
         birthday: '05-15- 2005'
         }
     ];
+
+    app.use('/documentation.html', express.static('public'));
+
+    app.use(morgan('common'));
+    
+    app.use(bodyParser.json());
+    
 
 //---------Movie Requests--------
 
