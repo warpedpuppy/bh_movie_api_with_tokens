@@ -159,9 +159,13 @@ const express = require('express'),
 
 
     app.get('/movies/directors/:name', (req, res) => {
-        res.json(movies.find( (movies) =>
-        { return movies.directors === req.params.name;
-        }));
+        let moviesByDirector = movies.filter( function(movie){ return movie.director.name === req.params.name} )
+        res.json(moviesByDirector);
+    });
+
+    app.get('/movies/genre/:name', (req, res) => {
+        let moviesByGenre = movies.filter( function(movie){ return movie.genre === req.params.name} )
+        res.json(moviesByGenre);
     });
   
 
@@ -197,24 +201,36 @@ const express = require('express'),
         }else {
             newUser.id = uuid.v4();
             users.push(newUser);
-            res.status(201).send(newUser);
+            res.status(201).json(newUser);
         }
     });
 
     app.put('/users/:username', (req, res) => {
-        let user = user.find((user) => {
-            return user.username === req.params.username});
+        let newData = req.body;
+
+        let user = user.find((user) => { return user.username === req.params.username});
+    
+        if (newData.email) {
+            user.email = newData.email;
+        }
+        if (newData.password) {
+            user.passowrd = newData.password;
+        }
+        if (newData.birthday) {
+        user.birthday = newData.birthday;
+    }
+        res.json({user})
     });
 
 
-    app.delete('/users/delete/:username', (req, res) => {
-        let user = user.find((user) => {
-            return user.id === req.params.id});
+    app.delete('/users/delete/:id', (req, res) => {
+        let user = user.find((user) => { return user.id === req.params.id});
 
             if (user) {
-                user = user.filter((obj) => {
-                    return obj.id !== req.params.id});
+                user = user.filter( (user) => { return user.id !== req.params.id});
                 res.status(201).send('User' + req.params.id + 'was deleted.');
+            }else {
+                res.status(201).send('User not found.');
             }
     });
 
