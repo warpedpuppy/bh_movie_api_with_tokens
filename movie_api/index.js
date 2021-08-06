@@ -227,16 +227,26 @@ const express = require('express'),
     });
 
     app.post('/users', (req, res) => {
-        let newUser = req.body;
-        
-        if (!newUser.username) {
-            const message = 'Username not found';
-            res.status(400).send(message);
-        }else {
-            newUser.id = uuid.v4();
-            users.push(newUser);
-            res.status(201).json(newUser);
-        }
+       Users.findOne({Username: req.body.Username })
+         .then((user) => {
+             if (user) {
+                 return res.status(400).send(req.body.Username + "already exists")
+             } else {
+                 Users.create({
+                     Username: req.body.Username,
+                     Password: req.body.Password,
+                     Email: req.body.Email,
+                     Birthday: req.body.Birthday,
+                 })
+                    .then((user) => {
+                        res.status(201).json(user);
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        res.status(500).send("Error: " + error);
+                    });
+             }
+         })
     });
 
     app.put('/users/:username', (req, res) => {
