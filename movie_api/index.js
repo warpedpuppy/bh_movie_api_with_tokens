@@ -1,19 +1,21 @@
 const express = require('express'),
-        morgan = require('morgan'),
-        app = express(),
-        bodyParser = require('body-parser'),
-        uuid = require('uuid');
-        mongoose = require('mongoose');
-        Models = require('./models.js');
-        Movies = Models.Movie;
-        Users = Models.User;
-        Genres = Models.Genre;
-        Directors = Models.Director;
+  bodyParser = require('body-parser'),       
+  uuid = require('uuid');
 
-        mongoose.connect('mongodb://localhost:27017/myFlixDB', {
-             useNewUrlParser: true,
-             useUnifiedTopology: true 
-        });
+  morgan = require('morgan'),
+  app = express(),      
+  mongoose = require('mongoose');
+  Models = require('./models.js');
+        
+  Movies = Models.Movie;
+  Users = Models.User;
+  Genres = Models.Genre;
+  Directors = Models.Director;
+
+  mongoose.connect('mongodb://localhost:27017/myFlixDB', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true 
+  });
 
     
 
