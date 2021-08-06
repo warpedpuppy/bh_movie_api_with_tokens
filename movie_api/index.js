@@ -209,7 +209,14 @@ const express = require('express'),
     //--------User requests--------
 
     app.get('/users', (req, res) => {
-        res.json(users);
+        Users.find()
+            .then(function (users) {
+                res.status(201).json(users);
+            })
+            .catch(function (err) {
+                console.error(err);
+                res.status(500).send("Error:" + err);
+            });
     });
 
     app.post('/users', (req, res) => {
