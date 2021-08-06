@@ -174,7 +174,14 @@ const express = require('express'),
     });
 
     app.get('/movies/:title', (req, res) => {
-        res.send('Details have not been loaded yet');
+        Movie.findOne({ Title: req.params.Title })
+          .then((movie) => {
+              res.json(movie);
+          })
+          .catch((err) => {
+              console.error(err);
+              res.status(500).send("Error: " + err);
+          });
     });
 
 
