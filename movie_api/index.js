@@ -160,13 +160,17 @@ const express = require('express'),
 
 //---------Movie Requests--------
 
-    app.get('/topmovies', (req, res) => {
-    res.json(topMovies);
-    });
 
 
     app.get('/movies', (req, res) => {
-        res.json(movies);
+        Movies.find()
+          .then((movies) => {
+              res.status(201).json(movies);
+          })
+          .catch((err) => {
+              console.error(err);
+              res.status(500).send("Error: " + err);
+          });
     });
 
     app.get('/movies/:title', (req, res) => {
