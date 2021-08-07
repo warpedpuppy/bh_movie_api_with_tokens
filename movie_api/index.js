@@ -45,7 +45,7 @@ const express = require('express'),
     app.get('/movies/:title', (req, res) => {
         Movie.findOne({ Title: req.params.Title })
           .then((movies) => {
-              res.json(movies);
+             res.status(201).json(movies);
           })
           .catch((err) => {
               console.error(err);
