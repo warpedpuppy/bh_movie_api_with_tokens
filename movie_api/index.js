@@ -42,10 +42,10 @@ const express = require('express'),
           });
     });
 
-    app.get('/movies/:title', (req, res) => {
+    app.get('/movies/:Title', (req, res) => {
         Movies.findOne({ Title: req.params.Title })
-          .then((movies) => {
-             res.json(movies);
+          .then((movie) => {
+             res.json(movie);
           })
           .catch((err) => {
               console.error(err);
