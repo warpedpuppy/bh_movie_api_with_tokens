@@ -44,8 +44,8 @@ const express = require('express'),
 
     app.get('/movies/:Title', (req, res) => {
         Movies.findOne({ Title: req.params.Title })
-          .then((movie) => {
-             res.json(movie);
+          .then((movies) => {
+             res.json(movies);
           })
           .catch((err) => {
               console.error(err);
@@ -54,10 +54,17 @@ const express = require('express'),
     });
 
 
-    app.get('/movies/directors/:name', (req, res) => {
-        let moviesByDirector = movies.filter( function(movie){ return movie.director.name === req.params.name} )
-        res.json(moviesByDirector);
-    });
+    app.get('/movies/:directors', (req, res) => {
+        Directors.find()
+        .then((directors) => {
+            res.status(201).json(directors);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send("Error: " + err);
+        });
+  });
+    
 
     app.get('/movies/genre/:name', (req, res) => {
         let moviesByGenre = movies.filter( function(movie){ return movie.genre === req.params.name} )
