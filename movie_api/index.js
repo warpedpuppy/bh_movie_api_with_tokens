@@ -25,6 +25,8 @@ const express = require('express'),
     app.use(morgan('common'));
     
     app.use(bodyParser.json());
+
+    app.use(bodyParser.urlencoded({ extended: true }));
     
 
 //---------Movie Requests--------
@@ -44,8 +46,8 @@ const express = require('express'),
 
     app.get('/movies/:Title', (req, res) => {
         Movies.findOne({ Title: req.params.Title })
-          .then((movies) => {
-             res.json(movies);
+          .then((movie) => {
+             res.json(movie);
           })
           .catch((err) => {
               console.error(err);
@@ -54,12 +56,24 @@ const express = require('express'),
     });
 
 
-    app.get('/movies/:directors', (req, res) => {
+    app.get('/directors', (req, res) => {
         Directors.find()
         .then((directors) => {
             res.status(201).json(directors);
         })
         .catch((err) => {
+            console.error(err);
+            res.status(500).send("Error: " + err);
+        });
+  });
+    
+
+    app.get('/genres', (req, res) => {
+        Genres.find()
+          .then((genres) => {
+            res.status(201).json(genres);
+        })
+          .catch((err) => {
             console.error(err);
             res.status(500).send("Error: " + err);
         });
