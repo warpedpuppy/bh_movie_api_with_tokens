@@ -1,6 +1,7 @@
 const express = require('express'),
   bodyParser = require('body-parser'),       
   uuid = require('uuid');
+const { Movie } = require('./models.js');
 
   morgan = require('morgan'),
   app = express(),      
@@ -57,9 +58,10 @@ const express = require('express'),
 
 
     app.get('/directors', (req, res) => {
-        Directors.find()
-        .then((directors) => {
-            res.status(201).json(directors);
+        Movies.find()
+        .then( movies => {
+            let directors = movies.map(movie => movie.Director);
+            res.status(201).json(directors)
         })
         .catch((err) => {
             console.error(err);
@@ -69,11 +71,12 @@ const express = require('express'),
     
 
     app.get('/genres', (req, res) => {
-        Genres.find()
-          .then((genres) => {
-            res.status(201).json(genres);
+        Movies.find()
+        .then( movies => {
+            let Genre = movies.map(movie => movie.Genre);
+            res.status(201).json(Genre)
         })
-          .catch((err) => {
+        .catch((err) => {
             console.error(err);
             res.status(500).send("Error: " + err);
         });
@@ -81,8 +84,14 @@ const express = require('express'),
     
 
     app.get('/movies/genre/:name', (req, res) => {
-        let moviesByGenre = movies.filter( function(movie){ return movie.genre === req.params.name} )
-        res.json(moviesByGenre);
+       Movie.find({"Genre.Name": req.params.name})
+       .then( movies => {
+           res.status(201).json(movies)
+       })
+       .catch((err) => {
+           console.error(err);
+           res.status(500).send("Error: " + err);
+       });
     });
   
 
@@ -118,9 +127,9 @@ const express = require('express'),
 
     app.post('/users', (req, res) => {
        Users.findOne({Username: req.body.Username })
-         .then((user) => {
+        .then((user) => {
              if (user) {
-                 return res.status(400).send(req.body.Username + "already exists")
+                 return res.status(400).send(req.body.Username + " already exists")
              } else {
                  Users.create({
                      Username: req.body.Username,
@@ -132,7 +141,6 @@ const express = require('express'),
                         res.status(201).json(user);
                     })
                     .catch((error) => {
-                        console.error(error);
                         res.status(500).send("Error: " + error);
                     });
              }
@@ -140,34 +148,53 @@ const express = require('express'),
     });
 
     app.put('/users/:username', (req, res) => {
-        let newData = req.body;
-
-        let user = user.find((user) => { return user.username === req.params.username});
-    
-        if (newData.email) {
-            user.email = newData.email;
-        }
-        if (newData.password) {
-            user.passowrd = newData.password;
-        }
-        if (newData.birthday) {
-        user.birthday = newData.birthday;
-    }
-        res.json({user})
+       Users.findOne({_id: req.params.id })
+       .then((user) => {
+           if (!user) {
+               return res.status(400).send(req.body.Username + " does not exist")
+           } else {
+               let updateObject = {};
+               if (req.body.Username) {
+                   updateObject.Username = req.body.Username;
+               }
+               if (req.body.Password) {
+                   updateObject.Password = req.body.Password;
+               }
+               if (req.body.Email) {
+                   updateObject.Email = req.body.Email;
+               }
+               if (req.body.Birthday) {
+                   updateObject.Birthday = req.body.Birthday;
+               }
+               Users
+               .findByIdAndUpdate({_id: req.params.id}, updateObject, {new: true})
+               .then((user) => {
+                   res.status(201).json(user);
+               })
+               .catch((error) => {
+                   res.status(500).send("Error: " + error);
+               });
+           }
+       })
     });
-
 
     app.delete('/users/delete/:id', (req, res) => {
-        let user = user.find((user) => { return user.id === req.params.id});
-
-            if (user) {
-                user = user.filter( (user) => { return user.id !== req.params.id});
-                res.status(201).send('User' + req.params.id + 'was deleted.');
-            }else {
-                res.status(201).send('User not found.');
+        Users.findOne({_id: req.params.id })
+        .then((user) => {
+            if (!user) {
+                return res.status(400).send(req.body.Username + " does not exist")
+            } else {
+                Users
+                .findOneAndDelete({_id: req.params.id})
+                .then((user) => {
+                    res.status(201).json(user);
+                })
+                .catch((error) => {
+                    res.status(500).send("Error: " + error);
+                });
             }
+        })
     });
-
 
 
     app.get('/', (req, res) => {
