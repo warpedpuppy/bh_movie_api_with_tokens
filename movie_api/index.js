@@ -146,7 +146,7 @@ const { Movie } = require('./models.js');
          })
     });
 
-    app.put('/users/:username', (req, res) => {
+    app.put('/users/:id', (req, res) => {
        Users.findOne({_id: req.params.id })
        .then((user) => {
            if (!user) {
