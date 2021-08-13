@@ -24,21 +24,28 @@
                     <td>/movies</td>
                     <td>GET</td>
                     <td>None</td>
-                    <td>Json objects show data on list of movies</td>
+                    <td>Json objects show data on list of movies titles, along with genres, directors bio and image.</td>
                 </tr>
                 <tr>
                     <td>Movie details</td>
-                    <td>/movies/details/:title</td>
+                    <td>/movies/:Title</td>
                     <td>GET</td>
                     <td>None</td>
-                    <td>Json objects showing data on movie title, img, description,genre, directors, actors</td>
+                    <td>Json objects pulls up data on movies by title.</td>
                 </tr>
                 <tr>
                     <td>Movie Directors</td>
-                    <td>/movies/directors/:name</td>
+                    <td>/movies/directors</td>
                     <td>Get</td>
                     <td>None</td>
-                    <td>Json objects returns information on directors, birth, death</td>
+                    <td>Json objects returns information on all directors, birth, death</td>
+                </tr>
+                <tr>
+                    <td>Movie Genres</td>
+                    <td>/movies/Genre</td>
+                    <td>Get</td>
+                    <td>None</td>
+                    <td>Json objects returns information on all movie genres</td>
                 </tr>
                 <tr>
                     <td>Delete movies from list</td>
@@ -64,13 +71,13 @@
                 <tr>
                     <td>Update account</td>
                     <td>Post</td>
-                    <td>/users</td>
+                    <td>/users/:id</td>
                     <td>Json with data that is being added</td>
                     <td>Json confirming that updates have been applied or denied</td>
                 </tr>
                 <tr>
                     <td>Delete a user</td>
-                    <td>/users/delete/:username</td>
+                    <td>/users/delete/:id</td>
                     <td>Delete</td>
                     <td>None</td>
                     <td>Message indicating the status of whether or not the request was completed</td>
