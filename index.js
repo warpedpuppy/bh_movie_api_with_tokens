@@ -172,7 +172,7 @@ app.get('/', (req, res) => {
 
 
 //--------Delete an existing user-----
-    app.delete('/users/delete/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+    app.delete('/users/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
         Users.findOne({_id: req.params.id })
         .then((user) => {
             if (!user) {
@@ -191,23 +191,38 @@ app.get('/', (req, res) => {
     });
 
     //------Add Movies to Users favorites-----
-    app.post('/movies', (req, res) => {
-        let newMovie = req.body;
-
-        if(!newMovie.title) {
-            const message = 'Missing title in request body';
-            res.status(400).send(message);
-        }else {
-            newMovie.id = uuid.v4();
-            movies.push(newMovie);
-            res.status(201).send(newMovie);
-        }
+    app.post('/users/:id/movies/:Title',  passport.authenticate('jwt', { session: false }), (req, res) => {
+        Users.findOneAndUpdate({_id: req.params.id }, {
+          $push: { FavoriteMovies: req.params.Title}
+        }),
+        { new: true}, // update is returned  
+         ((err, user) => {
+            if (err) {
+                console.error(err);
+                res.status(500).send('Error: ' + err);
+            }else {
+                res.json(user);
+            }
+        });
     });
 
     //------Delete Movies from Users Favorites-----
-    app.delete('/movies/remove/:title', (req, res) => {
-        res.send('Successful delete request returning list with movies removed that were deleted');
+    app.delete('/users/:id/movies/:Title',  passport.authenticate('jwt', { session: false }), (req, res) => {
+        Users.findOneAndUpdate({_id: req.params.id }, {
+          $pull: { FavoriteMovies: req.params.Title}
+        }),
+        { new: true}, // update is returned  
+         ((err, user) => {
+            if (err) {
+                console.error(err);
+                res.status(500).send('Error: ' + err);
+            }else {
+                res.json(user);
+            }
+        });
     });
+   
+    
 
     
 
