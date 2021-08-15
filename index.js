@@ -33,11 +33,13 @@ const { Movie } = require('./models.js');
     require('./passport');
     
 
-//---------Movie Requests--------
+//---------Returns Movies Home Page--------
+app.get('/', (req, res) => {
+    res.send('Welcome to My Flix');
+});
 
-
-
-    app.get('/movies', (req, res) => {
+//----Returns all movies----
+    app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
         Movies.find()
           .then((movies) => {
               res.status(201).json(movies);
@@ -48,7 +50,8 @@ const { Movie } = require('./models.js');
           });
     });
 
-    app.get('/movies/:Title', (req, res) => {
+//-----Returns movies by Title-----
+    app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req, res) => {
         Movies.findOne({ Title: req.params.Title })
           .then((movie) => {
              res.json(movie);
@@ -59,8 +62,8 @@ const { Movie } = require('./models.js');
           });
     });
 
-
-    app.get('/directors', (req, res) => {
+//------Returns a list of all movie directors----
+    app.get('/directors', passport.authenticate('jwt', { session: false }), (req, res) => {
         Movies.find()
         .then( movies => {
             let directors = movies.map(movie => movie.Director);
@@ -72,8 +75,8 @@ const { Movie } = require('./models.js');
         });
   });
     
-
-    app.get('/genres', (req, res) => {
+//-------Returns a list of all genres------
+    app.get('/genres', passport.authenticate('jwt', { session: false }), (req, res) => {
         Movies.find()
         .then( movies => {
             let Genre = movies.map(movie => movie.Genre);
@@ -85,8 +88,8 @@ const { Movie } = require('./models.js');
         });
   });
     
-
-    app.get('/movies/genre/:name', (req, res) => {
+//--------Returns a movie by genre------
+    app.get('/movies/genre/:name', passport.authenticate('jwt', { session: false }), (req, res) => {
        Movie.find({"Genre.Name": req.params.name})
        .then( movies => {
            res.status(201).json(movies)
@@ -97,27 +100,10 @@ const { Movie } = require('./models.js');
        });
     });
   
-
-    app.post('/movies', (req, res) => {
-        let newMovie = req.body;
-
-        if(!newMovie.title) {
-            const message = 'Missing title in request body';
-            res.status(400).send(message);
-        }else {
-            newMovie.id = uuid.v4();
-            movies.push(newMovie);
-            res.status(201).send(newMovie);
-        }
-    });
-
-    app.delete('/movies/remove/:title', (req, res) => {
-        res.send('Successful delete request returning list with movies removed that were deleted');
-    });
-
     //--------User requests--------
 
-    app.get('/users', (req, res) => {
+    //------Show User List------
+    app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) => {
         Users.find()
             .then(function (users) {
                 res.status(201).json(users);
@@ -128,6 +114,7 @@ const { Movie } = require('./models.js');
             });
     });
 
+    //------Adding a new User-----
     app.post('/users', (req, res) => {
        Users.findOne({Username: req.body.Username })
         .then((user) => {
@@ -150,7 +137,9 @@ const { Movie } = require('./models.js');
          })
     });
 
-    app.put('/users/:id', (req, res) => {
+
+    //-----Updating a users information
+    app.put('/users/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
        Users.findOne({_id: req.params.id })
        .then((user) => {
            if (!user) {
@@ -181,7 +170,9 @@ const { Movie } = require('./models.js');
        })
     });
 
-    app.delete('/users/delete/:id', (req, res) => {
+
+//--------Delete an existing user-----
+    app.delete('/users/delete/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
         Users.findOne({_id: req.params.id })
         .then((user) => {
             if (!user) {
@@ -199,10 +190,24 @@ const { Movie } = require('./models.js');
         })
     });
 
+    app.post('/movies', (req, res) => {
+        let newMovie = req.body;
 
-    app.get('/', (req, res) => {
-        res.send('Welcome to My Flix');
+        if(!newMovie.title) {
+            const message = 'Missing title in request body';
+            res.status(400).send(message);
+        }else {
+            newMovie.id = uuid.v4();
+            movies.push(newMovie);
+            res.status(201).send(newMovie);
+        }
     });
+
+    app.delete('/movies/remove/:title', (req, res) => {
+        res.send('Successful delete request returning list with movies removed that were deleted');
+    });
+
+    
 
     app.use((err, req, res, next) => {
         console.error(err.stack);
