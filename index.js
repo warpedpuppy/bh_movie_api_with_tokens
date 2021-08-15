@@ -190,6 +190,7 @@ app.get('/', (req, res) => {
         })
     });
 
+    //------Add Movies to Users favorites-----
     app.post('/movies', (req, res) => {
         let newMovie = req.body;
 
@@ -203,6 +204,7 @@ app.get('/', (req, res) => {
         }
     });
 
+    //------Delete Movies from Users Favorites-----
     app.delete('/movies/remove/:title', (req, res) => {
         res.send('Successful delete request returning list with movies removed that were deleted');
     });
