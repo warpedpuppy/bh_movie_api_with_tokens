@@ -129,14 +129,15 @@ app.get('/', (req, res) => {
 
     //------Adding a new User-----
     app.post('/users', (req, res) => {
-       Users.findOne({Username: req.body.Username })
+       let hashedPassword = Users.hashedPassword(req.body.Password);
+        Users.findOne({Username: req.body.Username })
         .then((user) => {
              if (user) {
                  return res.status(400).send(req.body.Username + " already exists")
              } else {
                  Users.create({
                      Username: req.body.Username,
-                     Password: req.body.Password,
+                     Password: hashedPassword,
                      Email: req.body.Email,
                      Birthday: req.body.Birthday,
                  })
@@ -144,10 +145,15 @@ app.get('/', (req, res) => {
                         res.status(201).json(user);
                     })
                     .catch((error) => {
+                        console.error(error);
                         res.status(500).send("Error: " + error);
                     });
              }
          })
+         .catch((error) => {
+             console.error(error);
+             res.status(500).send('Error: ' + error);
+         });
     });
 
 
